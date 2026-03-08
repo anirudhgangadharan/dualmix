@@ -9,7 +9,7 @@ const useMixerStore = create((set, get) => ({
     set((state) => ({
       channels: {
         ...state.channels,
-        [trackId]: { leftGain: 1.0, rightGain: 1.0, routing: 'both', volume: 1.0 },
+        [trackId]: { leftGain: 1.0, rightGain: 1.0, routing: 'both', volume: 1.0, loop: false },
       },
     }));
     engine.setTrackRouting(trackId, 1.0, 1.0);
@@ -59,6 +59,15 @@ const useMixerStore = create((set, get) => ({
       },
     }));
     engine.setTrackRouting(trackId, g.leftGain, g.rightGain);
+  },
+
+  toggleLoop: (trackId) => {
+    set((state) => ({
+      channels: {
+        ...state.channels,
+        [trackId]: { ...state.channels[trackId], loop: !state.channels[trackId]?.loop },
+      },
+    }));
   },
 
   setEarVolume: (trackId, ear, value) => {

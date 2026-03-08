@@ -30,5 +30,16 @@ export default function useAudioEngine() {
     [removeTrack, removeChannel]
   );
 
-  return { loadTrack, unloadTrack, togglePlay, seek };
+  const setLoop = useCallback(
+    (trackId, value) => {
+      const stateTrack = usePlayerStore.getState().activeTracks.find((t) => t.trackId === trackId);
+      if (stateTrack?.audioEl) {
+        stateTrack.audioEl.loop = value;
+      }
+      useMixerStore.getState().toggleLoop(trackId);
+    },
+    []
+  );
+
+  return { loadTrack, unloadTrack, togglePlay, seek, setLoop };
 }

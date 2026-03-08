@@ -16,13 +16,14 @@ export default function ChannelStrip({ trackId }) {
   const channel = useMixerStore((s) => s.channels[trackId]);
   const setRouting = useMixerStore((s) => s.setRouting);
   const setVolume = useMixerStore((s) => s.setVolume);
-  const { unloadTrack, togglePlay, seek } = useAudioEngine();
+  const { unloadTrack, togglePlay, seek, setLoop } = useAudioEngine();
 
   if (!track || !channel) return null;
 
   const name = track.fileInfo.name.replace(/\.[^.]+$/, '');
   const routing = channel.routing;
   const vol = channel.volume;
+  const loop = channel.loop ?? false;
 
   return (
     <div className="bg-slate-800/80 rounded-xl p-4 flex flex-col gap-3 border border-slate-700/50">
@@ -54,6 +55,17 @@ export default function ChannelStrip({ trackId }) {
               <path d="M2 1.5v13l11-6.5z" />
             </svg>
           )}
+        </button>
+        <button
+          onClick={() => setLoop(trackId, !loop)}
+          className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors shrink-0 ${
+            loop
+              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/30'
+              : 'bg-white/5 text-white/40 hover:bg-white/10'
+          }`}
+          title={loop ? 'Loop on' : 'Loop off'}
+        >
+          &#x21BB;
         </button>
         <div className="flex-1 flex flex-col gap-1">
           <Slider
